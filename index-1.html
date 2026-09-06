@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rabbi TopUp</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f6fb;color:#172033}
+header{background:#111827;color:white;padding:22px 16px;text-align:center}
+header h1{margin:0 0 6px} header p{margin:0;color:#cbd5e1}
+main{max-width:720px;margin:28px auto;padding:0 16px}
+.card{background:white;border-radius:18px;padding:22px;box-shadow:0 8px 25px #00000012;margin-bottom:18px}
+label{display:block;font-weight:700;margin:14px 0 7px}
+input,select,button{width:100%;padding:13px;border-radius:10px;border:1px solid #d1d5db;font-size:16px}
+button{margin-top:18px;background:#111827;color:white;border:0;cursor:pointer;font-weight:700}
+.packages{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.package{padding:14px;border:2px solid #e5e7eb;border-radius:12px;cursor:pointer;text-align:center}
+.package.selected{border-color:#111827;background:#f3f4f6}
+.notice{background:#fff7ed;padding:12px;border-radius:10px;font-size:14px}
+#result{display:none;background:#ecfdf5;border:1px solid #a7f3d0;padding:14px;border-radius:10px;margin-top:15px}
+small{color:#64748b}
+</style>
+</head>
+<body>
+<header><h1>Rabbi TopUp</h1><p>Free Fire Diamond Top-Up</p></header>
+<main>
+<div class="card">
+<h2>Diamond Order</h2>
+<label>Free Fire UID</label>
+<input id="uid" inputmode="numeric" placeholder="আপনার Player UID লিখুন">
+<label>Diamond Package</label>
+<div class="packages" id="packages">
+  <div class="package" data-name="100 Diamonds" data-price="100">100 💎<br><small>৳100</small></div>
+  <div class="package" data-name="310 Diamonds" data-price="300">310 💎<br><small>৳300</small></div>
+  <div class="package" data-name="520 Diamonds" data-price="500">520 💎<br><small>৳500</small></div>
+  <div class="package" data-name="1060 Diamonds" data-price="950">1060 💎<br><small>৳950</small></div>
+</div>
+<label>Payment Method</label>
+<select id="payment">
+<option value="">একটি নির্বাচন করুন</option>
+<option>bKash</option>
+<option>Nagad</option>
+</select>
+<div class="notice" style="margin-top:15px">এটি একটি demo website। বাস্তব payment/top-up চালুর আগে অনুমোদিত payment gateway ও বৈধ top-up source সংযুক্ত করুন।</div>
+<button onclick="placeOrder()">Order Submit</button>
+<div id="result"></div>
+</div>
+<div class="card">
+<h3>Support</h3>
+<p>Order ID দিয়ে আপনার order-এর বিষয়ে যোগাযোগ করুন।</p>
+<small>Facebook/WhatsApp নম্বর এখানে আপনার নিজের তথ্য দিয়ে বসাবেন।</small>
+</div>
+</main>
+<script>
+let selected=null;
+document.querySelectorAll('.package').forEach(p=>p.onclick=()=>{
+ document.querySelectorAll('.package').forEach(x=>x.classList.remove('selected'));
+ p.classList.add('selected'); selected=p;
+});
+function placeOrder(){
+ const uid=document.getElementById('uid').value.trim();
+ const pay=document.getElementById('payment').value;
+ if(!/^\d{5,15}$/.test(uid)){alert('সঠিক Free Fire UID দিন।');return}
+ if(!selected){alert('একটি Diamond package নির্বাচন করুন।');return}
+ if(!pay){alert('Payment method নির্বাচন করুন।');return}
+ const order='RT'+Date.now().toString().slice(-8);
+ const r=document.getElementById('result');
+ r.style.display='block';
+ r.innerHTML='<b>Order তৈরি হয়েছে ✅</b><br>Order ID: '+order+
+ '<br>UID: '+uid+'<br>Package: '+selected.dataset.name+
+ '<br>Amount: ৳'+selected.dataset.price+
+ '<br><small>Demo mode: কোনো বাস্তব payment নেওয়া হয়নি।</small>';
+}
+</script>
+</body>
+</html>
